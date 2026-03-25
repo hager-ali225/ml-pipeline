@@ -9,3 +9,4 @@ with open("model_info.txt", "w") as f:
     f.write("run_123")
 
 print("Accuracy:", accuracy)
+print("Run ID: run_123")
