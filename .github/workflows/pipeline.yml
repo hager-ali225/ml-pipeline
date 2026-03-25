@@ -8,27 +8,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5  # تحديث النسخة
 
-      # Install dependencies
       - name: Install dependencies
-        run: |
-          pip install mlflow dvc
-      # Pull data (لو عندك DVC)
+        run: pip install mlflow dvc
+
       - name: Pull data
-        run: |
-          dvc pull || echo "No DVC repo"
-      # Run training
+        run: dvc pull || echo "No DVC repo"
+
       - name: Train model
         run: python train.py
 
-      # Simulate MLflow run id
       - name: Save Run ID
         run: echo "run_12345" > model_info.txt
 
-      # Upload artifact
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3  # تحديث النسخة
         with:
           name: model_info
           path: model_info.txt
@@ -38,19 +33,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5  # تحديث النسخة
 
-      # Download artifact
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3  # تحديث النسخة
         with:
           name: model_info
 
-      # Check threshold
       - name: Check threshold
         run: python check_threshold.py
 
-      # Mock Docker build
       - name: Mock Docker Build
-        run: |
-          echo "Building Docker image for Run ID: $(cat model_info.txt)"
+        run: echo "Building Docker image for Run ID: $(cat model_info.txt)"
