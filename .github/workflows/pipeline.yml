@@ -40,7 +40,6 @@ jobs:
           name: model-info
           path: model_info.txt
 
-
   deploy:
     needs: validate
     runs-on: ubuntu-latest
