@@ -10,16 +10,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run training
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install mlflow dvc
+
+      # Pull data (لو عندك DVC)
+      - name: Pull data
+        run: |
+          dvc pull || echo "No DVC repo"
+
+      # Run training
+      - name: Train model
         run: python train.py
 
+      # Simulate MLflow run id
+      - name: Save Run ID
+        run: echo "run_12345" > model_info.txt
+
+      # Upload artifact
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: model_info
-          path: |
-            model_info.txt
-            accuracy.txt
+          path: model_info.txt
 
   deploy:
     needs: validate
@@ -28,13 +42,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Download artifact
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: model_info
 
+      # Check threshold
       - name: Check threshold
         run: python check_threshold.py
 
-      - name: Mock Docker
-        run: echo "Deploying model..."
+      # Mock Docker build
+      - name: Mock Docker Build
+        run: |
+          echo "Building Docker image for Run ID: $(cat model_info.txt)"
