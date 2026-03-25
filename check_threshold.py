@@ -1,7 +1,8 @@
 THRESHOLD = 0.85
 
-with open("accuracy.txt", "r") as f:
-    accuracy = float(f.read())
+# Simulated accuracy (لأن مفيش MLflow حقيقي)
+import random
+accuracy = random.uniform(0.7, 0.95)
 
 print("Accuracy:", accuracy)
 
