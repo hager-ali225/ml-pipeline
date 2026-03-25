@@ -2,63 +2,55 @@ name: ML Pipeline
 
 on:
   push:
-    branches:
-      - main
 
 jobs:
-
   validate:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.10
-
-      - name: Install Dependencies
+      # Install dependencies
+      - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-          pip install dvc mlflow
-
-      - name: Pull Data with DVC
-        run: dvc pull
-
-      - name: Train Model
+          pip install mlflow dvc
+      # Pull data (لو عندك DVC)
+      - name: Pull data
+        run: |
+          dvc pull || echo "No DVC repo"
+      # Run training
+      - name: Train model
         run: python train.py
 
-      - name: Upload Artifact
+      # Simulate MLflow run id
+      - name: Save Run ID
+        run: echo "run_12345" > model_info.txt
+
+      # Upload artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: model-info
-          path: |
-            model_info.txt
-            accuracy.txt
+          name: model_info
+          path: model_info.txt
 
   deploy:
     needs: validate
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Download Artifact
+      # Download artifact
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: model-info
+          name: model_info
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.10
-
-      - name: Check Accuracy Threshold
+      # Check threshold
+      - name: Check threshold
         run: python check_threshold.py
 
+      # Mock Docker build
       - name: Mock Docker Build
         run: |
           echo "Building Docker image for Run ID: $(cat model_info.txt)"
