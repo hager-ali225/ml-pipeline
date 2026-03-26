@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5  # تحديث النسخة لتجنب Node.js 20
+      - uses: actions/checkout@v5
 
       - name: Install dependencies
         run: pip install mlflow dvc
@@ -23,7 +23,7 @@ jobs:
         run: echo "run_12345" > model_info.txt
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3  # تحديث النسخة
+        uses: actions/upload-artifact@v4
         with:
           name: model_info
           path: model_info.txt
@@ -33,10 +33,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5  # تحديث النسخة
+      - uses: actions/checkout@v5
 
       - name: Download artifact
-        uses: actions/download-artifact@v3  # تحديث النسخة
+        uses: actions/download-artifact@v4
         with:
           name: model_info
 
