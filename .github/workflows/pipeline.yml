@@ -19,9 +19,6 @@ jobs:
       - name: Train model
         run: python train.py
 
-      - name: Save Run ID
-        run: echo "run_12345" > model_info.txt
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -41,7 +38,7 @@ jobs:
           name: model_info
 
       - name: Check threshold
-        run: python check_threshold.py
+        run: python check_threshold.py  # لو accuracy < 0.85 هيفشل تلقائي
 
       - name: Mock Docker Build
         run: |
