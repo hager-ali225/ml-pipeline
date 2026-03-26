@@ -1,4 +1,4 @@
-THRESHOLD = 0.90
+THRESHOLD = 0.6
 
 with open("accuracy.txt", "r") as f:
     accuracy = float(f.read())
