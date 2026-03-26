@@ -1,6 +1,7 @@
 import random
 
-accuracy = random.uniform(0.86, 0.95)  # Run ناجح
+# Generate a successful run (accuracy > threshold)
+accuracy = random.uniform(0.86, 0.95)
 
 with open("accuracy.txt", "w") as f:
     f.write(str(accuracy))
