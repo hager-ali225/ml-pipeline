@@ -1,5 +1,5 @@
 # check_threshold.py
-THRESHOLD = 0.85
+THRESHOLD = 0.90
 
 with open("accuracy.txt", "r") as f:
     accuracy = float(f.read())
