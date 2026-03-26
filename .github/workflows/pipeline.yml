@@ -11,10 +11,12 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Install dependencies
-        run: pip install mlflow dvc scikit-learn pandas
+        run: |
+          pip install --upgrade pip
+          pip install mlflow dvc scikit-learn pandas
 
       - name: Pull data
-        run: dvc pull || echo "No DVC repo"
+        run: dvc pull || echo "No DVC repo – skipped"
 
       - name: Train model
         run: python train.py
@@ -38,8 +40,7 @@ jobs:
           name: model_info
 
       - name: Check threshold
-        run: |
-          python check_threshold.py || echo "Model did not meet threshold. Deploy stopped."
+        run: python check_threshold.py
 
       - name: Build Docker Image
         run: |
