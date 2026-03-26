@@ -31,15 +31,18 @@ preds = model.predict(X_test)
 accuracy = accuracy_score(y_test, preds)
 
 # -------------------
-# Step 4: MLflow Logging
+# Step 4: MLflow Logging (Safe)
 # -------------------
-mlflow.set_tracking_uri("http://localhost:5000")  # عدلي URI لو عندك MLflow server
-mlflow.set_experiment("ML_Pipeline_Assignment")
-run_id = "run_123"
-
-with mlflow.start_run(run_name=run_id):
-    mlflow.log_param("model", "RandomForest")
-    mlflow.log_metric("accuracy", accuracy)
+try:
+    mlflow.set_tracking_uri("http://localhost:5000")  # عدلي لو عندك server حقيقي
+    mlflow.set_experiment("ML_Pipeline_Assignment")
+    run_id = "run_123"
+    with mlflow.start_run(run_name=run_id):
+        mlflow.log_param("model", "RandomForest")
+        mlflow.log_metric("accuracy", accuracy)
+except Exception as e:
+    print("⚠️ MLflow logging skipped:", e)
+    run_id = "run_123"
 
 # -------------------
 # Step 5: Save files
